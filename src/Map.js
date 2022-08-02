@@ -28,7 +28,7 @@ function Map() {
     //function to get lat-lng after setting point
     dragend() {
       const marker = markerRef.current
-      setlatpoints(marker.getLatLng().lat)
+      setlatpoints(marker.getLatLng())
       setlngpoints(marker.getLatLng().lng)
       // console.log(marker.getBounds())
     },
