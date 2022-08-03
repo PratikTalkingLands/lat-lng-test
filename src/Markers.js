@@ -18,14 +18,19 @@ const center = [12.971599,77.594566];
 
     let map = useMap()
 
+
+
     map.addEventListener("click",(e)=>{
         setpos(e.latlng)
         setstatus(true)
+        
 
     })
 
     useEffect(()=>{
         props.getmap(status,pos)
+
+       
     })
     // 
   return (

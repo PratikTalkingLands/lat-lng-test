@@ -55,6 +55,7 @@ function Map() {
       const marker = markerRef.current
       setlatpoints(marker.getLatLng().lat)
       setlngpoints(marker.getLatLng().lng)
+      
       // console.log(marker.getBounds())
       // setmapcenter(center)
     },
@@ -65,10 +66,10 @@ function Map() {
   const getmap = (data,pos)=>{
     setmarkerhide(data)
     setdynamicpos(pos)
-    setlatpoints(pos.lat)
-    setlngpoints(pos.lng)
- 
-
+    if(!latpoints && !lngpoints){
+      setlatpoints(pos.lat)
+      setlngpoints(pos.lng)
+    }
   }
 
 
@@ -90,7 +91,7 @@ function Map() {
           <Markers getmap={getmap}/>
           
           {markerhide ?  <Marker position={dynamicpos}
-            draggable="true"
+             draggable = "true"
             eventHandlers={eventHandlers}
             //position={position}
             ref={markerRef}></Marker> : ''}

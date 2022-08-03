@@ -6,8 +6,10 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Circle, CircleMar
 // import { marker } from "leaflet";
 import { useMemo } from "react";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer, Toast } from "react-toastify";
 import { map } from "leaflet";
+//import { Toast } from "react-toastify/dist/components";
+import ToastMsg from './ToastMsg';
 
 
 function Sidenav(props) {
@@ -91,7 +93,7 @@ function Sidenav(props) {
         let imgName = e.target.files[0].name
         setData(()=>({
             ...data,
-            img:`${src}/${imgName}`
+            img:URL.createObjectURL(e.target.files[0])
         }))
     }
 
@@ -107,7 +109,12 @@ function Sidenav(props) {
         axios.post('https://jsonbase-8e899-default-rtdb.firebaseio.com/sample.json', alldata)
             .then(response => console.log("response", response))
             .catch(json => console.log(json))
+            alert("Data Submitted")
     }
+
+    // const showToast = () => {
+    //     alert("Data Submitted")
+    // }
     return (
         <div className='sidebar'>
             <div className='title'>
@@ -118,7 +125,7 @@ function Sidenav(props) {
                 <input onChange={handle}   type="text"  value={data.imgdesc} placeholder="Imagesdesc" name="imgdesc" />
                 {/* <input onChange={(e) => handle(e)} type="text" id="longitude" value={props.lngpoints} placeholder="Longitude" name="longitude" /> */}
                 {/* <input type="text" id="centerCoordinate" value={centerCoordinate} placeholder="Center of the map" name="placeholder" hidden/> */}
-                <input onChange={ handle} type="textarea" id="story" value={data.description} name="description" placeholder="Enter your story" style={{ "height": 80 }} />
+                <input onChange={ handle} type="text" id="story" value={data.description} name="description" placeholder="Enter your story" style={{ "height": 80 }} />
                 <input
                     type="file"
                     multiple={true}
@@ -135,7 +142,7 @@ function Sidenav(props) {
                     Change profile
                 </button> */}
 
-                <button onClick={handleOnCLick} type="click" id="submit-btn">Enter Story</button>
+                <button onClick={handleOnCLick}  type="click" id="submit-btn">Enter Story</button>
 
             </form>
         </div>
