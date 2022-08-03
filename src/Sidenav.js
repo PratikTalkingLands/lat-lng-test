@@ -7,23 +7,26 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Circle, CircleMar
 import { useMemo } from "react";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
+import { map } from "leaflet";
 
 
 function Sidenav(props) {
     //console.log(props)
-
+    const coordinates = [props.latpoints, props.lngpoints]
+    const bounds = props.center
+ 
+    // const centerCoordinate = [props.clatpoints, props.clngpoints]
 
     const fileInputRef = useRef(null)
 
-
-
-    const url = ""
+    // const url = "kia"
     const [data, setData] = useState({
-        latitude: "",
-        longitude: "",
-        story: "",
-        image:""
+        title:"",
+        img:"",
+        imgdesc: "",
+        description:""
     })
+
 
     // const [image, setImage] = useState()
 
@@ -71,71 +74,57 @@ function Sidenav(props) {
     function handle(e) {
         const newData = e.target.value;
 
-        setData(() => ({
-            latitude: props.latpoints,
-            longitude: props.lngpoints,
-            story: e.target.value,
-            
-        }))
-        // setData({
-        //     ...data,
-        //     [e.target.name]:e.target.value
-        // })
-        // ...data,
-        // [e.target.name]:newData
-
-        // const newData = {...data}
-        // newData[e.target.id] = e.target.value
-        // setData(newData)
+        setData({
+            ...data,
+            [e.target.name]:newData
+        })
 
     }
-    // Handle click event, 
-    // this fun will be called after the btn-click and will upload in the database
-    // Initialising the onClick function to push with async
+   
+    
+
+    const handleImage = (e) => {
+       
+        e.preventDefault()
+        let src = URL.createObjectURL(e.target.files[0])
+        //console.log(e.target.files[0].name)
+        let imgName = e.target.files[0].name
+        setData(()=>({
+            ...data,
+            img:`${src}/${imgName}`
+        }))
+    }
+
+    let alldata = {
+        data:data,
+        coordinates:coordinates,
+        bounds:bounds
+    }
+
     const handleOnCLick = async (e) => {
         e.preventDefault();
         console.log(data)
-        axios.post('https://jsonbase-8e899-default-rtdb.firebaseio.com/sample.json', data)
+        axios.post('https://jsonbase-8e899-default-rtdb.firebaseio.com/sample.json', alldata)
             .then(response => console.log("response", response))
             .catch(json => console.log(json))
     }
-
-    const handleImage = (e) => {
-        // hiddenBtn.current.click()
-        // console.log(e.target.files[0])
-        e.preventDefault()
-        setData(()=>({
-            ...data,
-            image:URL.createObjectURL(e.target.files[0])
-        }))
-    }
-    console.log(data.image)
-
-    /*const handleFileChange = (e) => {
-        e.preventDefault()
-        let a = e.target.files[0]
-        //setImage(a);
-    }*/
-    //form start
     return (
         <div className='sidebar'>
             <div className='title'>
                 <h1>Talking Lands</h1>
             </div>
             <form className="story-form">
-                <input onChange={(e) => handle(e)} type="text" id="latitude" value={props.latpoints} placeholder="Latitude" name="latitude" />
-                <input onChange={(e) => handle(e)} type="text" id="longitude" value={props.lngpoints} placeholder="Longitude" name="longitude" />
-                <input onChange={(e) => handle(e)} type="textarea" id="story" value={data.story} name="story" placeholder="Enter your story" style={{ "height": 80 }} />
-
-                {/* 
-                 */}
+                <input onChange={handle} type="text" value={data.title} name="title" placeholder="Title of the Tale"/>
+                <input onChange={handle}   type="text"  value={data.imgdesc} placeholder="Imagesdesc" name="imgdesc" />
+                {/* <input onChange={(e) => handle(e)} type="text" id="longitude" value={props.lngpoints} placeholder="Longitude" name="longitude" /> */}
+                {/* <input type="text" id="centerCoordinate" value={centerCoordinate} placeholder="Center of the map" name="placeholder" hidden/> */}
+                <input onChange={ handle} type="textarea" id="story" value={data.description} name="description" placeholder="Enter your story" style={{ "height": 80 }} />
                 <input
                     type="file"
                     multiple={true}
                     ref={fileInputRef}
-                    name="image"
-                    onChange={handleImage}
-                    
+                    name="img"
+                    onChange={handleImage}         
                 />
 
                 {/* <button
