@@ -31,7 +31,7 @@ const center = [12.971599,77.594566];
         props.getmap(status,pos)
 
        
-    })
+    },[pos])
     // 
   return (
     <div>

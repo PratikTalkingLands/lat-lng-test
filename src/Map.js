@@ -1,6 +1,6 @@
 import React from "react";
 import './App.css'
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Circle, CircleMarker, Polyline, ScaleControl } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Circle, CircleMarker, Polyline, ScaleControl, Tooltip } from 'react-leaflet';
 import { Icon, map } from "leaflet";
 import { useMemo } from "react";
 import { useState } from "react";
@@ -66,10 +66,10 @@ function Map() {
   const getmap = (data,pos)=>{
     setmarkerhide(data)
     setdynamicpos(pos)
-    if(!latpoints && !lngpoints){
+    //if(!latpoints && !lngpoints){
       setlatpoints(pos.lat)
       setlngpoints(pos.lng)
-    }
+    //}
   }
 
 
@@ -94,7 +94,9 @@ function Map() {
              draggable = "true"
             eventHandlers={eventHandlers}
             //position={position}
-            ref={markerRef}></Marker> : ''}
+            ref={markerRef}>
+              <Tooltip>You can also drag the marker to get next location</Tooltip>
+            </Marker> : ''}
          
 
         </MapContainer>
