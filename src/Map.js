@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useRef } from "react";
+import marker from "leaflet.smooth_marker_bouncing";
 // import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Sidenav from './Sidenav'
@@ -13,8 +14,8 @@ import Markers from "./Markers";
 // Starting point of map
 
 export const icon = new Icon({
-  iconUrl: "./glowing-dot.png",
-  iconSize: [50, 50]
+  iconUrl: "./map-marker-gif-three.gif",
+  iconSize: [110, 80]
 });
 
 const center = [12.971599,77.594566];
@@ -29,6 +30,10 @@ const center = [12.971599,77.594566];
 // Dragging and getting lat lng start
 function Map() {
 
+
+  
+
+
  
   const [dynamicpos,setdynamicpos] = useState();
 
@@ -36,8 +41,9 @@ function Map() {
   const markerRef = useRef(null) 
   const [latpoints, setlatpoints] = useState()
   const [lngpoints, setlngpoints] = useState()
-  const [map,setMap] = useState('')
+  // const [map,setMap] = useState('')
   const [markerhide,setmarkerhide] = useState(false);
+  
 
   // const [clatpoints, setclatpoints] = useState(center.lat)
   // const [clngpoints, setclngpoints] = useState(center.lng)
@@ -46,6 +52,7 @@ function Map() {
   //   setmarkerhide(!markerhide)
   // })
 
+  
  
 
   const eventHandlers = useMemo(() => ({
@@ -72,6 +79,10 @@ function Map() {
     //}
   }
 
+  
+
+  
+  
 
 
 
@@ -82,7 +93,16 @@ function Map() {
       </div>
       {/* <Sidenav latpoints={latpoints} lngpoints={lngpoints}/> */}
       <div className="map-container">
-        <MapContainer center={center} zoom={16} scrollWheelZoom={true} >
+        <MapContainer center={center} zoom={16} scrollWheelZoom={true}>
+
+        
+
+        
+
+          
+
+          
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -90,12 +110,19 @@ function Map() {
 
           <Markers getmap={getmap}/>
           
-          {markerhide ?  <Marker position={dynamicpos}
+          {markerhide ?  <Marker position={dynamicpos} icon={icon}
              draggable = "true"
             eventHandlers={eventHandlers}
             //position={position}
-            ref={markerRef}>
-              <Tooltip>You can also drag the marker to get next location</Tooltip>
+            ref={markerRef}
+            bounce = {L.bounce}
+            
+            >
+              <Tooltip sticky>
+                <div>
+                  <img className="tooltip-class" src="./dragTip.png"></img>
+                </div>
+              </Tooltip>
             </Marker> : ''}
          
 

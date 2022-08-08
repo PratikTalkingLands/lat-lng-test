@@ -16,18 +16,22 @@ function Sidenav(props) {
     //console.log(props)
     const coordinates = [props.latpoints, props.lngpoints]
     const bounds = props.center
- 
+
     // const centerCoordinate = [props.clatpoints, props.clngpoints]
 
     const fileInputRef = useRef(null)
 
     // const url = "kia"
     const [data, setData] = useState({
-        title:"",
-        img:"",
+        title: "",
+        img: "",
         imgdesc: "",
-        description:""
+        description: "",
+        // coordinates:"",
+        // bounds:""
     })
+
+
 
 
     // const [image, setImage] = useState()
@@ -78,39 +82,83 @@ function Sidenav(props) {
 
         setData({
             ...data,
-            [e.target.name]:newData
+            coordinates,
+            bounds,
+            [e.target.name]: newData
         })
 
     }
-   
-    
+
+
 
     const handleImage = (e) => {
-       
+
         e.preventDefault()
         let src = URL.createObjectURL(e.target.files[0])
         //console.log(e.target.files[0].name)
         let imgName = e.target.files[0].name
-        setData(()=>({
+        setData(() => ({
             ...data,
-            img:URL.createObjectURL(e.target.files[0])
+            img: URL.createObjectURL(e.target.files[0]),
+            coordinates:coordinates,
+            bounds:bounds
         }))
     }
 
-    let alldata = {
-        data:data,
-        coordinates:coordinates,
-        bounds:bounds
-    }
+    let alldata = [data]
+    console.log(alldata)
+
+    
+ 
 
     const handleOnCLick = async (e) => {
         e.preventDefault();
-        console.log(data)
+        if(!coordinates[0]){
+            alert("Please select marker")
+        } else {
+        
         axios.post('https://jsonbase-8e899-default-rtdb.firebaseio.com/sample.json', alldata)
             .then(response => console.log("response", response))
             .catch(json => console.log(json))
-            alert("Data Submitted")
+        alert("Data Submitted")
+
+
+        // setData({
+        //     title: "",
+        //     img: "",
+        //     imgdesc: "",
+        //     description: ""
+        // })
+        }
     }
+
+    /*const submitJson = async(e) => {
+        e.preventDefault()
+        var title = title.value()
+        var imgdesc = imgdesc.value()
+        var story = story.value()
+
+        // doing ajax call after we get the value
+        axios.post("",{
+            alldata
+        }, function(response) {
+
+        })
+    }*/
+    
+
+
+    const newStory = () => {
+
+        setData({
+            title: "",
+            img: "",
+            imgdesc: "",
+            description: ""
+        })
+    }
+
+
 
     // const showToast = () => {
     //     alert("Data Submitted")
@@ -121,17 +169,17 @@ function Sidenav(props) {
                 <h1>Talking Lands</h1>
             </div>
             <form className="story-form">
-                <input onChange={handle} type="text" value={data.title} name="title" placeholder="Title of the Tale"/>
-                <input onChange={handle}   type="text"  value={data.imgdesc} placeholder="Imagesdesc" name="imgdesc" />
+                <input onChange={handle} type="text" value={data.title} id="title" name="title" placeholder="Title of the Tale" />
+                <input onChange={handle} type="text" value={data.imgdesc} id="imgdesc" placeholder="Imagesdesc" name="imgdesc" />
                 {/* <input onChange={(e) => handle(e)} type="text" id="longitude" value={props.lngpoints} placeholder="Longitude" name="longitude" /> */}
                 {/* <input type="text" id="centerCoordinate" value={centerCoordinate} placeholder="Center of the map" name="placeholder" hidden/> */}
-                <input onChange={ handle} type="text" id="story" value={data.description} name="description" placeholder="Enter your story" style={{ "height": 80 }} />
+                <input onChange={handle} type="text" id="story" value={data.description} name="description" placeholder="Enter your story" style={{ "height": 80 }} />
                 <input
                     type="file"
                     multiple={true}
                     ref={fileInputRef}
                     name="img"
-                    onChange={handleImage}         
+                    onChange={handleImage}
                 />
 
                 {/* <button
@@ -142,7 +190,11 @@ function Sidenav(props) {
                     Change profile
                 </button> */}
 
-                <button onClick={handleOnCLick}  type="click" id="submit-btn">Enter Story</button>
+                <button onClick={handleOnCLick} type="click" id="submit-btn">Push Tales</button>
+
+
+                <button onClick={newStory} type="click" id="new-story">Add New Tale</button>
+                
 
             </form>
         </div>

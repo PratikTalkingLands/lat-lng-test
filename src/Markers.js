@@ -3,8 +3,8 @@ import {  Marker,useMap } from 'react-leaflet';
 import { Icon, map } from "leaflet";
 
 export const icon = new Icon({
-    iconUrl: "./glowing-dot.png",
-    iconSize: [50, 50]
+    iconUrl: "./map-marker.gif",
+    iconSize: [70, 70]
   });
   
 const center = [12.971599,77.594566];
